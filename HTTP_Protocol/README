@@ -1,0 +1,41 @@
+Onea Stanislav 322CA
+    
+    Tema este implimentata in C++ iar pentru parsare json am ales biblioteca recomandata in enunt: nlohmann.
+
+    Am inceput implimentarea de la laboratorul 10. Am schimbat putin compose_get_request si compose_post_request pentru
+a folosi mai usor doar char* in loc de char** dar si am adaugat campuri noi necesare cum ar fi JWT-token.
+
+    Dupa make run clientul va da comenzi catre server si va primi raspunsul corespunzator, aceste comenzi sunt:
+
+        *register - afiseaza liniile "username=" si "password=", citeste username is password, seteaza parola si username in json
+    compune mesajul post cu calea /auth/register, trimite la server si afiseaza raspunsul.
+
+        *login - afiseaza liniile "username=" si "password=", citeste username is password, seteaza parola si username in json,
+    compune mesajul post cu calea /auth/login, trimite la server si afiseaza raspunsul, verifica daca credentialele sunt corecte, daca da extrage cookies cu functia extract_cookies
+    care gaseste linia necesare cu strstr deilimiteaza pana la ";" cu strtok si scoate primele carectere de "Set-Cookies; ", daca nu cookies
+    ramane egal cu NULL.
+
+        *enter_library - verifica daca clientul e conectat, adica daca cookie != NULL, compune mesajul de get_request cu "/api/v1/tema/library/access"
+    in care este introdus cookie, afiseaza raspunsul si extrage jwt-token cu funtia extract_jwt, care parseaza linia token din json si cu strtok
+    elimina caracterele ".
+
+        *get_books - verifica jwt-ul, daca userul a intrat in librarie, compune mesajul de get_request cu "/api/v1/tema/library/books", trimite
+    mesajul si afiseaa rasunsul.
+
+        *get_book - verifica jwt-ul, afiseaza prompt-ul pentru id, citeste id-ul, compune mesajul de get_request cu calea construita cu append
+    si anume "/api/v1/tema/library/books/" + id-ul, primeste si afieseaza raspunsul;
+
+        *add_book - afiseaza prompt pentru introducerea datelor despre carte, citeste datele introduse de client, seteaza json-ul cu datele citite
+    compune mesajul de post_request cu "/api/v1/tema/library/books", primeste si afiseaza raspunsul;
+
+        *delete_book - verifica jwt-ul, afiseaza prompt-ul pentru id, citeste id-ul, compune mesajul de delete_request care a fost implimentat
+    in request special pentru comanda data, cu calea construita cu append si anume "/api/v1/tema/library/books/" + id-ul, primeste si afieseaza 
+    raspunsul; 
+
+        *logout - compune si trimi mesajul de get cu "/api/v1/tema/auth/logout", seteaza cookie si jwt pe NULL, primeste si afiseaza raspunsul.
+
+        *exit - reseteaza jwt si cookie, face break la while(1).
+
+        La toate comenzile in parte a fost deschise conexiune la inceput si inchise la sfarsit, si resetate stringuri ca message etc., daca e o comanda
+    necunoscuta afiseaza "Invalid command"
+
